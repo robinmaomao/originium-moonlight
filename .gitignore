@@ -1,0 +1,6 @@
+build/
+app/release/
+dist/
+*.zip
+*.exe
+*.pdb

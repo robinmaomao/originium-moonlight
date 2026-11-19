@@ -37,23 +37,18 @@ jobs:
         shell: pwsh
         run: ./setup-deps.ps1
 
-      - name: Build
-        shell: pwsh
+      - name: Build and deploy x64
+        shell: cmd
+        env:
+          CI_VERSION: 6.2.0-org.1
+          QT_PATH: ${{ runner.workspace }}\Qt\6.8.3\msvc2022_64\bin
         run: |
-          qmake moonlight-qt.pro CONFIG+=release
-          nmake
-
-      - name: Package portable ZIP
-        shell: pwsh
-        run: |
-          New-Item -ItemType Directory -Force -Path dist | Out-Null
-          Copy-Item -Recurse app/release/* dist/
-          Set-Content dist/portable.dat ''
-          Compress-Archive -Path dist/* -DestinationPath Moonlight-Originium-x64.zip
+          set "PATH=%QT_PATH%;%PATH%"
+          scripts\build-arch.bat Release x64
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: moonlight-windows-msvc
-          path: Moonlight-Originium-x64.zip
-          if-no-files-found: warn
+          path: build/installer-x64-release/MoonlightPortable-x64-*.zip
+          if-no-files-found: error

@@ -30,13 +30,17 @@ jobs:
       - name: Setup Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.11.0'
+          version: '6.8.3'
           arch: win64_msvc2022_64
+
+      - name: Fetch prebuilt dependencies
+        shell: pwsh
+        run: ./setup-deps.ps1
 
       - name: Build
         shell: pwsh
         run: |
-          qmake6 moonlight-qt.pro
+          qmake moonlight-qt.pro CONFIG+=release
           nmake
 
       - name: Package portable ZIP

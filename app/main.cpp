@@ -44,6 +44,7 @@
 #include "cli/startstream.h"
 #include "cli/pair.h"
 #include "cli/commandlineparser.h"
+#include "control/controlpipe.h"
 #include "path.h"
 #include "utils.h"
 #include "gui/computermodel.h"
@@ -1012,6 +1013,23 @@ int main(int argc, char *argv[])
             streamParser.parse(app.arguments(), preferences);
             QString host    = streamParser.getHost();
             QString appName = streamParser.getAppName();
+            const QString controlPipeName = streamParser.getControlPipe();
+            if (!controlPipeName.isEmpty()) {
+                auto* controlPipe = new ControlPipe(controlPipeName, &app);
+                controlPipe->setStateProvider([]() {
+                    QJsonObject state;
+                    state["state"] = Session::get() ? "streaming" : "idle";
+                    return state;
+                });
+                QObject::connect(controlPipe, &ControlPipe::stopRequested, []() {
+                    if (auto* session = Session::get()) {
+                        session->interrupt();
+                    }
+                });
+                if (!controlPipe->start()) {
+                    qWarning() << "Failed to start control pipe" << controlPipeName;
+                }
+            }
             auto launcher   = new CliStartStream::Launcher(host, appName, preferences, &app);
             engine.rootContext()->setContextProperty("launcher", launcher);
             break;

@@ -14,7 +14,7 @@ used by [Originium Stream](https://github.com/robinmaomao/originium-stream-webui
 
 | ID | Title | Capability | Status |
 |---|---|---|---|
-| 0001 | [Control channel v1](./patches/0001-control-channel.md) | `control-pipe` | design |
+| 0001 | [Control channel v1](./patches/0001-control-channel.md) | `control-pipe` | implemented (state/stop) |
 | 0002 | [Native child-window embedding](./patches/0002-native-embed.md) | `embed-parent` | design |
 
 Official portable builds remain supported: the application falls back to CLI

@@ -350,6 +350,7 @@ void StreamCommandLineParser::parse(const QStringList &args, StreamingPreference
     parser.addValueOption("fps", "FPS");
     parser.addValueOption("bitrate", "bitrate in Kbps");
     parser.addValueOption("packet-size", "video packet size");
+    parser.addValueOption("control-pipe", "Originium control pipe name");
     parser.addChoiceOption("display-mode", "display mode", m_WindowModeMap.keys());
     parser.addChoiceOption("audio-config", "audio config", m_AudioConfigMap.keys());
     parser.addToggleOption("multi-controller", "multiple controller support");
@@ -521,6 +522,7 @@ void StreamCommandLineParser::parse(const QStringList &args, StreamingPreference
         parser.showError("App not provided");
     }
     m_AppName = parser.positionalArguments().at(2);
+    m_ControlPipe = parser.value("control-pipe");
 }
 
 QString StreamCommandLineParser::getHost() const
@@ -531,6 +533,11 @@ QString StreamCommandLineParser::getHost() const
 QString StreamCommandLineParser::getAppName() const
 {
     return m_AppName;
+}
+
+QString StreamCommandLineParser::getControlPipe() const
+{
+    return m_ControlPipe;
 }
 
 ListCommandLineParser::ListCommandLineParser()

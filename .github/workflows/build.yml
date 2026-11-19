@@ -40,7 +40,6 @@ jobs:
       - name: Build and deploy x64
         shell: cmd
         env:
-          CI_VERSION: 6.2.0-org.1
           QT_PATH: ${{ runner.workspace }}\Qt\6.8.3\msvc2022_64\bin
         run: |
           set "PATH=%QT_PATH%;%PATH%"
